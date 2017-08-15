@@ -3,22 +3,22 @@ function convertToDOM(virtualElement) {
     if (typeof virtualElement === 'string') {
         return document.createTextNode(virtualElement);
     }
-    
-	const domElement = document.createElement(virtualElement.type);
+
+    const domElement = document.createElement(virtualElement.type);
     const virtualChildren = virtualElement.children || [];
-    virtualChildren.forEach((virtualChild) => {
+    virtualChildren.forEach(virtualChild => {
         domElement.appendChild(convertToDOM(virtualChild));
     });
-    
-    Object.keys(virtualElement.props || {}).forEach((propName) => {
+
+    Object.keys(virtualElement.props || {}).forEach(propName => {
         domElement[propName] = virtualElement.props[propName];
     });
-    
+
     return domElement;
 }
 
 function render(virtualTree, domContainer) {
-	const domElement = convertToDOM(virtualTree);
+    const domElement = convertToDOM(virtualTree);
     domContainer.innerHTML = '';
     domContainer.appendChild(domElement);
 }
@@ -26,14 +26,14 @@ function render(virtualTree, domContainer) {
 
 /* UI START */
 const virtualTree = {
-	type: 'div',
+    type: 'div',
     props: { className: 'virtual-div' },
     children: [
-    	{
-    		type: 'b',
-            children: ['Hello Virtual World!']
-    	}
-    ]
+        {
+            type: 'b',
+            children: ['Hello Virtual World!'],
+        },
+    ],
 };
 /* UI END */
 
@@ -41,6 +41,6 @@ const virtualTree = {
 const domContainer = document.getElementById('container');
 
 document.getElementById('run').addEventListener('click', () => {
-	render(virtualTree, domContainer);
+    render(virtualTree, domContainer);
 });
 /* CONTROL END */

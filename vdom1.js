@@ -6,7 +6,7 @@ function convertToDOM(element) {
 }
 
 function render(virtualTree, domContainer) {
-	const domElement = convertToDOM(virtualTree);
+    const domElement = convertToDOM(virtualTree);
     domContainer.innerHTML = '';
     domContainer.appendChild(domElement);
 }
@@ -20,6 +20,6 @@ const virtualTree = 'Hello Virtual World!';
 const domContainer = document.getElementById('container');
 
 document.getElementById('run').addEventListener('click', () => {
-	render(virtualTree, domContainer);
-})
+    render(virtualTree, domContainer);
+});
 /* CONTROL END */

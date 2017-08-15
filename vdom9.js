@@ -3,32 +3,35 @@ function convertToDOM(virtualElement) {
     if (typeof virtualElement === 'string') {
         return document.createTextNode(virtualElement);
     }
-    
-	const domElement = document.createElement(virtualElement.type);
+
+    const domElement = document.createElement(virtualElement.type);
     const virtualChildren = virtualElement.children || [];
-    virtualChildren.forEach((virtualChild) => {
+    virtualChildren.forEach(virtualChild => {
         domElement.appendChild(convertToDOM(virtualChild));
     });
-    
-    Object.keys(virtualElement.props || {}).forEach((propName) => {
+
+    Object.keys(virtualElement.props || {}).forEach(propName => {
         domElement[propName] = virtualElement.props[propName];
     });
-    
+
     return domElement;
 }
 
 function typeIsDifferent(oldVirtualTree, newVirtualTree) {
     return (
-    	oldVirtualTree.type !== newVirtualTree.type
-        || (typeof oldVirtualTree === 'string' && oldVirtualTree !== newVirtualTree)
+        oldVirtualTree.type !== newVirtualTree.type ||
+        (typeof oldVirtualTree === 'string' &&
+            oldVirtualTree !== newVirtualTree)
     );
 }
 
 function updateProps(oldProps, newProps, domElement) {
     const oldPropNames = Object.keys(oldProps || {});
     const newPropNames = Object.keys(newProps || {});
-    const mergedPropNames = Array.from(new Set(oldPropNames.concat(newPropNames)));
-    mergedPropNames.forEach((propName) => {
+    const mergedPropNames = Array.from(
+        new Set(oldPropNames.concat(newPropNames)),
+    );
+    mergedPropNames.forEach(propName => {
         if (oldProps[propName] !== newProps[propName]) {
             domElement[propName] = newProps[propName];
         }
@@ -54,7 +57,7 @@ function update(oldVirtualTree, newVirtualTree, container, index = 0) {
         container.replaceChild(newDomElement, oldDomElement);
     } else if (typeof newVirtualTree !== 'string') {
         updateProps(oldVirtualTree.props, newVirtualTree.props, oldDomElement);
-    
+
         const oldChildren = oldVirtualTree.children || [];
         const newChildren = newVirtualTree.children || [];
         const childrenLength = Math.max(oldChildren.length, newChildren.length);
@@ -70,15 +73,15 @@ const initialState = {
     color: 'green',
     boldText: 'Never updated!',
     count: 0,
-}
+};
 
 function handleUpdateClick() {
-    updateState((state) => {
+    updateState(state => {
         const count = state.count + 1;
         return {
             color: state.color === 'green' ? 'black' : 'green',
             boldText: `Updated ${count} times!`,
-            count
+            count,
         };
     });
 }
@@ -90,23 +93,23 @@ function component(state) {
             className: `virtual-div`,
         },
         children: [
-            { 
-            	type: 'b',
+            {
+                type: 'b',
                 children: [state.boldText],
-                props: { className: `text-${state.color}` }
+                props: { className: `text-${state.color}` },
             },
             {
-            	type: 'div',
+                type: 'div',
                 children: [
-                	{
-                    	type: 'button',
+                    {
+                        type: 'button',
                         children: ['Update'],
-                        props: { onclick: handleUpdateClick }
-                    }
-                ]
-            }
-    	]
-    }
+                        props: { onclick: handleUpdateClick },
+                    },
+                ],
+            },
+        ],
+    };
 }
 /* DATA & UI END */
 
@@ -114,6 +117,6 @@ function component(state) {
 const domContainer = document.getElementById('container');
 
 document.getElementById('run').addEventListener('click', () => {
-	render(component, domContainer, initialState);
+    render(component, domContainer, initialState);
 });
 /* CONTROL END */
